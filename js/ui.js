@@ -17,7 +17,6 @@ ZenPen.ui = (function() {
 	var expandScreenIcon = '&#xe000;';
 	var shrinkScreenIcon = '&#xe004;';
 
-	var darkLayout = false;
 
 	function init() {
 		
@@ -74,10 +73,6 @@ ZenPen.ui = (function() {
 		// UI element for color flip
 		colorLayoutElement = document.querySelector( '.color-flip' );
 		colorLayoutElement.onclick = onColorLayoutClick;
-
-		// UI element for full screen		
-		screenSizeElement = document.querySelector( '.fullscreen' );
-		screenSizeElement.onclick = onScreenSizeClick;
 
 		targetElement = document.querySelector( '.target ');
 		targetElement.onclick = onTargetClick;
