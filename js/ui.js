@@ -32,7 +32,6 @@ ZenPen.ui = (function() {
 		// Activate word counter
 		if ( localStorage['wordCount'] && localStorage['wordCount'] !== "0") {			
 			wordCountValue = parseInt(localStorage['wordCount']);
-			wordCountElement.value = localStorage['wordCount'];
 			wordCounter.className = "word-counter active";
 			updateWordCount();
 		}
@@ -56,25 +55,14 @@ ZenPen.ui = (function() {
 
 		uiContainer = document.querySelector( '.ui' );
 
-		// UI element for color flip
-		colorLayoutElement = document.querySelector( '.color-flip' );
-		colorLayoutElement.onclick = onColorLayoutClick;
-
-		targetElement = document.querySelector( '.target ');
-		targetElement.onclick = onTargetClick;
-		
 		//init event listeners only if browser can save
 		if (supportsSave) {
-
-			saveElement = document.querySelector( '.save' );
-			saveElement.onclick = onSaveClick;
 			
 			var formatSelectors = document.querySelectorAll( '.saveselection span' );
 			for( var i in formatSelectors ) {
 				formatSelectors[i].onclick = selectFormat;
 			}
-			
-			document.querySelector('.savebutton').onclick = saveText;
+
 		} else {
 			document.querySelector('.save.useicons').style.display = "none";
 		}
@@ -86,10 +74,6 @@ ZenPen.ui = (function() {
 		article = document.querySelector( '.content' );
 		article.onkeyup = onArticleKeyUp;
 
-		wordCountElement = wordCountBox.querySelector( 'input' );
-		wordCountElement.onchange = onWordCountChange;
-		wordCountElement.onkeyup = onWordCountKeyUp;
-
 		descriptionModal = overlay.querySelector( '.description' );
 		
 		saveModal = overlay.querySelector('.saveoverlay');
@@ -98,7 +82,6 @@ ZenPen.ui = (function() {
 		wordCounterProgress = wordCounter.querySelector( '.progress' );
 
 		aboutButton = document.querySelector( '.about' );
-		aboutButton.onclick = onAboutButtonClick;
 
 		header = document.querySelector( '.header' );
 		header.onkeypress = onHeaderKeyPress;

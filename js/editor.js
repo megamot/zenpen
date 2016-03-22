@@ -6,7 +6,7 @@ ZenPen.editor = (function() {
 	var headerField, contentField, cleanSlate, lastType, currentNodeList, savedSelection;
 
 	// Editor Bubble elements
-	var textOptions, optionsBox, boldButton, italicButton, quoteButton, urlButton, urlInput;
+	var textOptions, optionsBox, urlInput;
 
 	var composing;
 
