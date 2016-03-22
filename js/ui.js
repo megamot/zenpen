@@ -10,12 +10,7 @@ ZenPen.ui = (function() {
 
 	// Word Counter
 	var wordCountValue, wordCountBox, wordCountElement, wordCounter, wordCounterProgress;
-	
-	//save support
-	var supportSave, saveFormat, textToWrite;
-	
-	var expandScreenIcon = '&#xe000;';
-	var shrinkScreenIcon = '&#xe004;';
+
 
 
 	function init() {
@@ -29,8 +24,7 @@ ZenPen.ui = (function() {
 		if ( ZenPen.util.supportsHtmlStorage() ) {
 			loadState();
 		}
-		
-		console.log( "Checkin under the hood eh? We've probably got a lot in common. You should totally check out ZenPen on github! (https://github.com/tholman/zenpen)." );
+
 	}
 
 	function loadState() {
@@ -43,22 +37,14 @@ ZenPen.ui = (function() {
 			updateWordCount();
 		}
 
-		// Activate color switch
-		if ( localStorage['darkLayout'] === 'true' ) {
-			if ( darkLayout === false ) {
-				document.body.className = 'yang';
-			} else {
-				document.body.className = 'yin';
-			}
-			darkLayout = !darkLayout;
-		}
+
 
 	}
 
 	function saveState() {
 
 		if ( ZenPen.util.supportsHtmlStorage() ) {
-			localStorage[ 'darkLayout' ] = darkLayout;
+
 			localStorage[ 'wordCount' ] = wordCountElement.value;
 		}
 	}
@@ -100,7 +86,6 @@ ZenPen.ui = (function() {
 		article = document.querySelector( '.content' );
 		article.onkeyup = onArticleKeyUp;
 
-		wordCountBox = overlay.querySelector( '.wordcount' );
 		wordCountElement = wordCountBox.querySelector( 'input' );
 		wordCountElement.onchange = onWordCountChange;
 		wordCountElement.onkeyup = onWordCountKeyUp;
