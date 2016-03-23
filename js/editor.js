@@ -3,10 +3,10 @@ ZenPen = window.ZenPen || {};
 ZenPen.editor = (function() {
 
 	// Editor elements
-	var headerField, contentField, lastType, currentNodeList;
+	var contentField, lastType, currentNodeList;
 
 	// Editor Bubble elements
-	var textOptions, optionsBox;
+	var textOptions;
 
 	var composing;
 
@@ -18,7 +18,7 @@ ZenPen.editor = (function() {
 		// Set cursor position
 		var range = document.createRange();
 		var selection = window.getSelection();
-		range.setStart(headerField, 1);
+
 		selection.removeAllRanges();
 		selection.addRange(range);
 
@@ -66,11 +66,9 @@ ZenPen.editor = (function() {
 
 	function bindElements() {
 
-		headerField = document.querySelector( '.header' );
-		contentField = document.querySelector( '.content' );
-		textOptions = document.querySelector( '.text-options' );
 
-		optionsBox = textOptions.querySelector( '.options' );
+		contentField = document.querySelector( '.content' );
+
 
 	}
 
@@ -78,15 +76,6 @@ ZenPen.editor = (function() {
 
 		var selection = window.getSelection();
 
-
-		if ( (event.target.className === "url-input" ||
-		    event.target.classList.contains( "url" ) ||
-		    event.target.parentNode.classList.contains( "ui-inputs" ) ) ) {
-
-			currentNodeList = findNodes( selection.focusNode );
-			updateBubbleStates();
-			return;
-		}
 
 		// Check selections exist
 		if ( selection.isCollapsed === true && lastType === false ) {
@@ -104,8 +93,7 @@ ZenPen.editor = (function() {
 				updateBubbleStates();
 				updateBubblePosition();
 
-				// Show the ui bubble
-				textOptions.className = "text-options active";
+
 			}
 		}
 
@@ -152,19 +140,6 @@ ZenPen.editor = (function() {
 		}
 	}
 
-	function onSelectorBlur() {
-
-		textOptions.className = "text-options fade";
-		setTimeout( function() {
-
-			if (textOptions.className == "text-options fade") {
-
-				textOptions.className = "text-options";
-				textOptions.style.top = '-999px';
-				textOptions.style.left = '-999px';
-			}
-		}, 260 )
-	}
 
 	function findNodes( element ) {
 
@@ -191,15 +166,13 @@ ZenPen.editor = (function() {
 
 	function saveState( event ) {
 		
-		localStorage[ 'header' ] = headerField.innerHTML;
+
 		localStorage[ 'content' ] = contentField.innerHTML;
 	}
 
 	function loadState() {
 
-		if ( localStorage[ 'header' ] ) {
-			headerField.innerHTML = localStorage[ 'header' ];
-		}
+
 
 		if ( localStorage[ 'content' ] ) {
 			contentField.innerHTML = localStorage[ 'content' ];
