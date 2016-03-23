@@ -3,10 +3,10 @@ ZenPen = window.ZenPen || {};
 ZenPen.editor = (function() {
 
 	// Editor elements
-	var headerField, contentField, cleanSlate, lastType, currentNodeList, savedSelection;
+	var headerField, contentField, lastType, currentNodeList;
 
 	// Editor Bubble elements
-	var textOptions, optionsBox, urlInput;
+	var textOptions, optionsBox;
 
 	var composing;
 
@@ -44,15 +44,7 @@ ZenPen.editor = (function() {
 			document.onkeyup = checkTextHighlighting;
 		}
 
-		// Mouse bindings
-		document.onmousedown = checkTextHighlighting;
-		document.onmouseup = function( event ) {
 
-			setTimeout( function() {
-				checkTextHighlighting( event );
-			}, 1);
-		};
-		
 		// Window bindings
 		window.addEventListener( 'resize', function( event ) {
 			updateBubblePosition();
@@ -80,21 +72,6 @@ ZenPen.editor = (function() {
 
 		optionsBox = textOptions.querySelector( '.options' );
 
-		boldButton = textOptions.querySelector( '.bold' );
-		boldButton.onclick = onBoldClick;
-
-		italicButton = textOptions.querySelector( '.italic' );
-		italicButton.onclick = onItalicClick;
-
-		quoteButton = textOptions.querySelector( '.quote' );
-		quoteButton.onclick = onQuoteClick;
-
-		urlButton = textOptions.querySelector( '.url' );
-		urlButton.onmousedown = onUrlClick;
-
-		urlInput = textOptions.querySelector( '.url-input' );
-		urlInput.onblur = onUrlInputBlur;
-		urlInput.onkeydown = onUrlInputKeyDown;
 	}
 
 	function checkTextHighlighting( event ) {
@@ -193,12 +170,6 @@ ZenPen.editor = (function() {
 
 		var nodeNames = {};
 
-		// Internal node?
-		var selection = window.getSelection();
-
-		// if( selection.containsNode( document.querySelector('b'), false ) ) {
-		// 	nodeNames[ 'B' ] = true;
-		// }
 
 		while ( element.parentNode ) {
 
@@ -235,112 +206,6 @@ ZenPen.editor = (function() {
 		}
 	}
 
-	function onBoldClick() {
-		document.execCommand( 'bold', false );
-	}
-
-	function onItalicClick() {
-		document.execCommand( 'italic', false );
-	}
-
-	function onQuoteClick() {
-
-		var nodeNames = findNodes( window.getSelection().focusNode );
-
-		if ( hasNode( nodeNames, 'BLOCKQUOTE' ) ) {
-			document.execCommand( 'formatBlock', false, 'p' );
-			document.execCommand( 'outdent' );
-		} else {
-			document.execCommand( 'formatBlock', false, 'blockquote' );
-		}
-	}
-
-	function onUrlClick() {
-
-		if ( optionsBox.className == 'options' ) {
-
-			optionsBox.className = 'options url-mode';
-
-			// Set timeout here to debounce the focus action
-			setTimeout( function() {
-
-				var nodeNames = findNodes( window.getSelection().focusNode );
-
-				if ( hasNode( nodeNames , "A" ) ) {
-					urlInput.value = nodeNames.url;
-				} else {
-					// Symbolize text turning into a link, which is temporary, and will never be seen.
-					document.execCommand( 'createLink', false, '/' );
-				}
-
-				// Since typing in the input box kills the highlighted text we need
-				// to save this selection, to add the url link if it is provided.
-				lastSelection = window.getSelection().getRangeAt(0);
-				lastType = false;
-
-				urlInput.focus();
-
-			}, 100);
-
-		} else {
-
-			optionsBox.className = 'options';
-		}
-	}
-
-	function onUrlInputKeyDown( event ) {
-
-		if ( event.keyCode === 13 ) {
-			event.preventDefault();
-			applyURL( urlInput.value );
-			urlInput.blur();
-		}
-	}
-
-	function onUrlInputBlur( event ) {
-
-		optionsBox.className = 'options';
-		applyURL( urlInput.value );
-		urlInput.value = '';
-
-		currentNodeList = findNodes( window.getSelection().focusNode );
-		updateBubbleStates();
-	}
-
-	function applyURL( url ) {
-
-		rehighlightLastSelection();
-
-		// Unlink any current links
-		document.execCommand( 'unlink', false );
-
-		if (url !== "") {
-		
-			// Insert HTTP if it doesn't exist.
-			if ( !url.match("^(http|https)://") ) {
-
-				url = "http://" + url;	
-			} 
-
-			document.execCommand( 'createLink', false, url );
-		}
-	}
-
-	function rehighlightLastSelection() {
-
-		window.getSelection().addRange( lastSelection );
-	}
-
-	function getWordCount() {
-		
-		var text = ZenPen.util.getText( contentField );
-
-		if ( text === "" ) {
-			return 0
-		} else {
-			return text.split(/\s+/).length;
-		}
-	}
 
 	function onCompositionStart ( event ) {
 		composing = true;
@@ -352,8 +217,7 @@ ZenPen.editor = (function() {
 
 	return {
 		init: init,
-		saveState: saveState,
-		getWordCount: getWordCount
+		saveState: saveState
 	}
 
 })();
